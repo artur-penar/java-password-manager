@@ -3,6 +3,7 @@ public class Main {
         DataManager dataManager = new DataManager();
         dataManager.selectAllItems();
         dataManager.createTable();
+        dataManager.insertData("youtube", "youtube.com", "KabanYoutuber", "YT");
     }
 
 }

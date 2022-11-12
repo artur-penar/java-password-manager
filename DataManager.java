@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,7 +46,7 @@ public class DataManager {
 
   public static void createTable(){
     String createTablelQuerry = "CREATE TABLE IF NOT EXISTS warehouses (\n"
-                + "	id integer PRIMARY KEY,\n"
+                + "	id integer PRIMARY KEY AUTOINCREMENT,\n"
                 + "	app text ,\n"
                 + "	login text,\n"
                 + " email text,\n"
@@ -65,7 +66,7 @@ public class DataManager {
 
 
    public void selectAllItems(){
-      String sqlQuerry = "SELECT id, app, url, login, password from passwords";
+      String sqlQuerry = "SELECT id, app, url, login, password from warehouses"; 
       openConnection();
       try(Statement statement = connection.createStatement();
           ResultSet result = statement.executeQuery(sqlQuerry)){
@@ -83,7 +84,23 @@ public class DataManager {
       }
       closeConnection();
     }
-    
+
+
+    public static void insertData(String app, String url, String login, String password){
+      String insertDataQuerry = "INSERT INTO warehouses(app, url, login, password) VALUES(?,?,?,?)";
+      openConnection();
+        try(PreparedStatement prepStatement = connection.prepareStatement(insertDataQuerry)){
+            prepStatement.setString(1, app);
+            prepStatement.setString(2, url);
+            prepStatement.setString(3, login);
+            prepStatement.setString(4, password);
+            prepStatement.executeUpdate();
+            System.out.println("Wprowadzono dane.");
+    } catch (SQLException e){
+      System.out.println(e.getMessage());
+    }
+    closeConnection();
+  } 
 }
 
 
