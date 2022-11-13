@@ -101,7 +101,31 @@ public class DataManager {
     }
     closeConnection();
   } 
-}
+
+
+  public static DataRow getByApp(String appName){
+    DataRow dataRow = new DataRow(); 
+    String sqlSelectQuerry = "SELECT * FROM warehouses WHERE app = ?";
+    openConnection();
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuerry)){
+      pstmt.setString(1, appName);
+      ResultSet result = pstmt.executeQuery();
+      dataRow.setID(result.getInt("id"));
+      dataRow.setApp(result.getString("app"));
+      dataRow.setEmail(result.getString("email"));
+      dataRow.setLogin(result.getString("login"));
+      dataRow.setPassword(result.getString("password"));
+      dataRow.setUrl(result.getString("url"));
+    } catch (SQLException e ){
+      System.out.println(e.getMessage());
+    }
+    closeConnection();
+    return dataRow;
+   }
+
+  }
+
 
 
     
