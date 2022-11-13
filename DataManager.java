@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
 import javax.sql.StatementEvent;
 import javax.swing.plaf.nimbus.State;
 
@@ -111,6 +111,7 @@ public class DataManager {
     try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuerry)){
       pstmt.setString(1, appName);
       ResultSet result = pstmt.executeQuery();
+
       dataRow.setID(result.getInt("id"));
       dataRow.setApp(result.getString("app"));
       dataRow.setEmail(result.getString("email"));
@@ -124,6 +125,50 @@ public class DataManager {
     return dataRow;
    }
 
+
+
+
+
+
+   public static void getListByApp(String appName){
+      ArrayList<DataRow> dataRowsList = new ArrayList<DataRow>();
+      DataRow dataRow = new DataRow(); 
+      String sqlSelectQuerry = "SELECT * FROM warehouses WHERE app = ?";
+      openConnection();
+      
+      try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuerry)){
+        pstmt.setString(1, appName);
+        ResultSet result = pstmt.executeQuery();
+        while (result.next()){
+          System.out.println(result.getInt("id"));
+          dataRowsList.add(new DataRow(
+            result.getInt("id"),
+            result.getString("app"),
+            result.getString("email"),
+            result.getString("login"),
+            result.getString("password"),
+            result.getString("url")
+        ));
+      }
+        // dataRow.setID(result.getInt("id"));
+        // dataRow.setApp(result.getString("app"));
+        // dataRow.setEmail(result.getString("email"));
+        // dataRow.setLogin(result.getString("login"));
+        // dataRow.setPassword(result.getString("password"));
+        // dataRow.setUrl(result.getString("url"));
+      } catch (SQLException e ){
+        System.out.println(e.getMessage());
+      }
+      if (dataRowsList.isEmpty()){
+        System.out.println("Rekord '" + appName + "' nie wystepuje w bazie.");
+    }else {
+      for (DataRow row : dataRowsList){
+        row.displayRow();
+    }
+    }
+      closeConnection();
+
+  }
   }
 
 
