@@ -26,11 +26,19 @@ public class DataRow
     this.password = password;
     this.url = url;
   }
+
+
   public void displayRow(){
     if (id == 0){
       System.out.println("Nie ma takiego rekordu.");
     }else{
-    System.out.println(id + app + email + login + password + url);
+    System.out.println(
+        "id:" + id +
+        " app:" + app + 
+        " email:" + email +
+        " login:" + login + 
+        " password:" + password +
+        " url:" + url);
     }
   }
 

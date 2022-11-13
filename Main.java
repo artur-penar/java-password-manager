@@ -4,9 +4,8 @@ public class Main {
         // dataManager.selectAllItems();
         // dataManager.createTable();
         // dataManager.insertData("youtube", "youtube.com", "KabanYoutuber", "YT");
-        DataRow dataRow = dataManager.getByApp("");
-        dataRow.displayRow(); 
-        dataManager.selectAllItems();
+        // DataRow dataRow = dataManager.getListByApp("youtube");
+        dataManager.getListByApp("oogle");
          
   }
 }
