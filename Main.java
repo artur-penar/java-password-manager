@@ -1,11 +1,9 @@
+import java.util.ArrayList;
+
 public class Main {
-    public static void main(String[] args) {
-        DataManager dataManager = new DataManager();
-        // dataManager.selectAllItems();
-        // dataManager.createTable();
-        // dataManager.insertData("youtube", "youtube.com", "KabanYoutuber", "YT");
-        // DataRow dataRow = dataManager.getListByApp("youtube");
-        dataManager.getListByApp("oogle");
-         
-  }
+    public static void main(String[] args) throws Exception {
+
+        App app = new App();
+        app.startApp();
+    }
 }

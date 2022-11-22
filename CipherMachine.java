@@ -10,7 +10,7 @@ public class CipherMachine {
     private SecretKey key;
     private final int KEY_SIZE = 128;
     private final int DATA_LENGTH = 128;
-    public Cipher encryptionCipher;
+    private Cipher encryptionCipher;
 
     private byte[] IV;
 
@@ -27,14 +27,16 @@ public class CipherMachine {
         IV = encryptionCipher.getIV();
 
     }
-        public String encrypt(String data) throws Exception {
-            byte[] dataInBytes = data.getBytes();
 
-            byte[] encryptedBytes = encryptionCipher.doFinal(dataInBytes);
-            return encode(encryptedBytes);
-        }
+    public String encrypt(String data) throws Exception {
+        byte[] dataInBytes = data.getBytes();
 
-    public String decrypt(String encryptedData, SecretKey secretKey, String iv) throws Exception {
+        byte[] encryptedBytes = encryptionCipher.doFinal(dataInBytes);
+        return encode(encryptedBytes);
+    }
+
+    public String decrypt(String encryptedData, String secKey, String iv) throws Exception {
+        SecretKey secretKey = convertStringToSecretKey(secKey);
         byte[] ivInBytes = decode(iv);
         byte[] dataInBytes = decode(encryptedData);
         Cipher decryptionCipher = Cipher.getInstance("AES/GCM/NoPadding");
@@ -44,6 +46,7 @@ public class CipherMachine {
         byte[] decryptedBytes = decryptionCipher.doFinal(dataInBytes);
         return new String(decryptedBytes);
     }
+
     private String encode(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }
@@ -52,13 +55,15 @@ public class CipherMachine {
         return Base64.getDecoder().decode(data);
     }
 
-    private SecretKey getKey(){
-        return key;
+    public String getKey() throws NoSuchAlgorithmException {
+        return convertSecretKeyToString(key);
     }
 
-    private String getIv() {return encode(IV); }
+    public String getIv() {
+        return encode(IV);
+    }
 
-    public static SecretKey convertStringToSecretKey(String encodedKey) {
+    public static SecretKey convertStringToSecretKey(String encodedKey) throws NoSuchAlgorithmException {
         byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
         SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
         return originalKey;
@@ -73,33 +78,31 @@ public class CipherMachine {
 
     public static void main(String[] args) throws Exception {
 
-            CipherMachine cipherMachine = new CipherMachine();
-            CipherMachine cipherMachine2 = new CipherMachine();
+        CipherMachine cipherMachine = new CipherMachine();
+        CipherMachine cipherMachine2 = new CipherMachine();
 
-            String encryptedData = cipherMachine.encrypt("Hello");
-            String newEncryptedData = new String(encryptedData);
-            String iv = cipherMachine.getIv();
-            System.out.println("IV: " + iv);
+        String encryptedData = cipherMachine.encrypt("Hello");
+        String newEncryptedData = encryptedData;
+        String iv = cipherMachine.getIv();
+        System.out.println("IV: " + iv);
 
-            SecretKey secretKey = cipherMachine.getKey();
-            System.out.println(cipherMachine.encryptionCipher);
+        String secretKey = cipherMachine.getKey();
+        System.out.println(cipherMachine.encryptionCipher);
 
-            System.out.println("SecretKey format: " + secretKey);
+        System.out.println("SecretKey format: " + secretKey);
 
-            String stringSecretKey = convertSecretKeyToString(secretKey);
-            System.out.println("String format: " + stringSecretKey);
+        System.out.println("String format: " + secretKey);
 
-            String decryptedData = cipherMachine.decrypt(newEncryptedData, secretKey, iv);
+//            String decryptedData = cipherMachine.decrypt(newEncryptedData, secretKey, iv);
 
-            String encryptedData2 = new String("oz81lS+qBE7i+j0jJvDzpt2E+c1q");
-            String stringSecretKey2 = new String("uQ1GJ1MRv4EjqolIUQ1euA==");
-            String iv2 = new String("xS29V2dfxjDPuWw2");
-            SecretKey secretKey2 = convertStringToSecretKey(stringSecretKey2);
-
-            String decryptedData2 = cipherMachine2.decrypt(encryptedData2, secretKey2, iv2);
-            System.out.println(decryptedData2);
-            System.out.println("Encrypted Data : " + encryptedData);
-            System.out.println("Decrypted Data : " + decryptedData);
+        String encryptedData2 = "XkOr0IyO+5+8RrQo/D8pj/IsIU1Fm3h/N6E=";
+        String stringSecretKey2 = "t/0V7COqiUuG+THSL1mcCw==";
+        String iv2 = "i22bsUoi2RfBk1hq";
+        
+        String decryptedData2 = cipherMachine2.decrypt(encryptedData2, stringSecretKey2, iv2);
+        System.out.println(decryptedData2);
+        System.out.println("Encrypted Data : " + encryptedData);
+        // System.out.println("Decrypted Data : " + decryptedData);
 
     }
 }

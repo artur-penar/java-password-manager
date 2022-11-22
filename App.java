@@ -1,28 +1,25 @@
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.awt.*;
 import java.util.Scanner;
 
 class App {
+    CipherMachine cipherMachine;
     DataManager dataManager;
     DataRow dataRow;
+    Scanner scanner = new Scanner(System.in);
 
-    public App() {
+
+    public App() throws Exception {
         dataManager = new DataManager();
         dataRow = new DataRow();
+        cipherMachine = new CipherMachine();
     }
 
-    public void startApp() {
-        displayMenu();
-        int userChoice = getMenuChoice();
-        if (userChoice == 1){
-            addNewPassword();
-        }
-    }
-
-
+ 
     public int getMenuChoice() {
-        Scanner scanner = new Scanner(System.in);
         boolean isDataCorrect = false;
         int userChoice = 0;
         while (!isDataCorrect) {
@@ -62,11 +59,65 @@ class App {
         return result;
     }
 
-    public void addNewPassword() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Nazwa aplikacji\n>");
+
+    public String getEmail() {
+        boolean isValidEmail = false;
+
+        String emailAddress = null;
+        while (!isValidEmail) {
+            emailAddress = scanner.next();
+            if (isValidEmailAddress(emailAddress)) {
+                isValidEmail = true;
+            } else {
+                System.out.println("Niepoprawny email.");
+                System.out.print(">");
+            }
+
+        }
+        return emailAddress;
+    }
+
+    public DataRow getDataToDataRow() throws Exception {
+        System.out.print("Nazwa aplikacji:\n>");
         String app = scanner.next();
+        System.out.print("Login:\n>");
+        String login = scanner.next();
+
+        System.out.print("Hasło:\n>");
+        String password = scanner.next();
+        String encrpytedPassword = cipherMachine.encrypt(password);
+        String key = cipherMachine.getKey();
+        String iv = cipherMachine.getIv();
+        String spec = key + " " + iv;
+
+        System.out.print("Email:\n>");
+        String email = getEmail();
+        System.out.print("Url:\n>");
+        String url = scanner.next();
+        
+        dataRow.setApp(app);
+        dataRow.setLogin(login);
+        dataRow.setPassword(encrpytedPassword);
+        dataRow.setEmail(email);
+        dataRow.setUrl(url);
+        dataRow.setSpec(spec);
+        dataRow.displayRow();
+        
+        return dataRow;
+  }
+
+    public void addNewRecord() throws Exception {
+        dataManager.insertData(getDataToDataRow()); 
 
     }
+
+   public void startApp() throws Exception {
+        displayMenu();
+        int userChoice = getMenuChoice();
+        if (userChoice == 1) {
+            addNewRecord();
+        }
+    }
+
 
 }
