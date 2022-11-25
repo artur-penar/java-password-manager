@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.sun.net.httpserver.Authenticator.Result;
+
 
 public class DataManager {
     /**
@@ -126,6 +128,22 @@ public class DataManager {
         closeConnection();
         return dataRow;
     }
+    
+    public void displayAllApps(){
+        String allAppDisplayQuerry = "SELECT app from warehouses";
+        openConnection();
+        try(PreparedStatement pstmt = connection.prepareStatement(allAppDisplayQuerry)){
+            ResultSet result = pstmt.executeQuery();
+            while(result.next()){
+                System.out.println(result.getString("app"));
+            
+      }
+    } catch (SQLException e){
+          System.out.println(e);
+   
+    }  
+    
+  }
 
 
     public ArrayList<DataRow> getListByApp(String appName) {

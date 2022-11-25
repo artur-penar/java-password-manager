@@ -109,9 +109,7 @@ class App {
 
     }
 
-    public ArrayList<DataRow> getPasswordByApp() throws Exception {
-        System.out.print("Podaj nazwę aplikacji: \n>");
-        String appName = scanner.next();
+    public ArrayList<DataRow> getPasswordByApp(String appName) throws Exception {
         ArrayList<DataRow> encryptedDataRows = dataManager.getListByApp(appName);
         ArrayList<DataRow> decryptedDataRows = new ArrayList<DataRow>();
         for (DataRow rowToDecrypt : encryptedDataRows) {
@@ -125,19 +123,37 @@ class App {
         return decryptedDataRows;
     }
 
+    public void retrivePassword() throws Exception{
+        boolean isFinish = false;
+        while (!isFinish){
+            System.out.println("Type the application name: (type -da if you want display all aviable apps.)\n>");
+            String appName = scanner.next();
+            if (appName.equals("-da")){
+                dataManager.displayAllApps();
+      } else {
+            ArrayList<DataRow> passwords = getPasswordByApp(appName);
+            for (DataRow row : passwords){
+                row.displayRow();
+        }
+      }
+    }
+          
+  }
+
+
     public void startApp() throws Exception {
         displayMenu();
         int userChoice = getMenuChoice();
         if (userChoice == 1) {
             addNewRecord();
         } else if (userChoice == 2) {
-            for (DataRow dataRow : getPasswordByApp()) {
-                dataRow.displayRow();
+            retrivePassword();
             }
+
         }
         ;
 
     }
 
 
-}
+
