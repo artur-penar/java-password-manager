@@ -1,8 +1,6 @@
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 class App {
@@ -18,7 +16,7 @@ class App {
         cipherMachine = new CipherMachine();
     }
 
- 
+
     public int getMenuChoice() {
         boolean isDataCorrect = false;
         int userChoice = 0;
@@ -48,7 +46,7 @@ class App {
         );
     }
 
-    public static boolean isValidEmailAddress(String email) {
+    public static boolean isValidEmail(String email) {
         boolean result = true;
         try {
             InternetAddress emailAddr = new InternetAddress(email);
@@ -66,7 +64,7 @@ class App {
         String emailAddress = null;
         while (!isValidEmail) {
             emailAddress = scanner.next();
-            if (isValidEmailAddress(emailAddress)) {
+            if (isValidEmail(emailAddress)) {
                 isValidEmail = true;
             } else {
                 System.out.println("Niepoprawny email.");
@@ -94,7 +92,7 @@ class App {
         String email = getEmail();
         System.out.print("Url:\n>");
         String url = scanner.next();
-        
+
         dataRow.setApp(app);
         dataRow.setLogin(login);
         dataRow.setPassword(encrpytedPassword);
@@ -102,21 +100,43 @@ class App {
         dataRow.setUrl(url);
         dataRow.setSpec(spec);
         dataRow.displayRow();
-        
+
         return dataRow;
-  }
+    }
 
     public void addNewRecord() throws Exception {
-        dataManager.insertData(getDataToDataRow()); 
+        dataManager.insertData(getDataToDataRow());
 
     }
 
-   public void startApp() throws Exception {
+    public ArrayList<DataRow> getPasswordByApp() throws Exception {
+        System.out.print("Podaj nazwę aplikacji: \n>");
+        String appName = scanner.next();
+        ArrayList<DataRow> encryptedDataRows = dataManager.getListByApp(appName);
+        ArrayList<DataRow> decryptedDataRows = new ArrayList<DataRow>();
+        for (DataRow rowToDecrypt : encryptedDataRows) {
+            String[] decryptSpecList = rowToDecrypt.getDecryptSpecList();
+            String secretKey = decryptSpecList[0];
+            String iv = decryptSpecList[1];
+            String decryptedPassword = cipherMachine.decrypt(rowToDecrypt.getPassword(), secretKey, iv);
+            rowToDecrypt.setPassword(decryptedPassword);
+            decryptedDataRows.add(rowToDecrypt);
+        }
+        return decryptedDataRows;
+    }
+
+    public void startApp() throws Exception {
         displayMenu();
         int userChoice = getMenuChoice();
         if (userChoice == 1) {
             addNewRecord();
+        } else if (userChoice == 2) {
+            for (DataRow dataRow : getPasswordByApp()) {
+                dataRow.displayRow();
+            }
         }
+        ;
+
     }
 
 

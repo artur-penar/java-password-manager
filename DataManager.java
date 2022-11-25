@@ -104,7 +104,7 @@ public class DataManager {
     }
 
 
-    public static DataRow getByApp(String appName) {
+    public DataRow getByApp(String appName) {
         DataRow dataRow = new DataRow();
         String sqlSelectQuery = "SELECT * FROM warehouses WHERE app = ?";
         openConnection();
@@ -119,6 +119,7 @@ public class DataManager {
             dataRow.setLogin(result.getString("login"));
             dataRow.setPassword(result.getString("password"));
             dataRow.setUrl(result.getString("url"));
+            dataRow.setSpec(result.getString("spec"));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

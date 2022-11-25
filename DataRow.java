@@ -1,4 +1,5 @@
-
+import java.awt.List;
+import java.util.ArrayList;
 
 public class DataRow {
     private int id;
@@ -75,6 +76,13 @@ public class DataRow {
     public String getUrl() { return url; }
     
     public String getSpec() { return spec; }
+
+    public String[] getDecryptSpecList() {
+        String[] decrpytionSpecyficationList = spec.split(" ");
+        return decrpytionSpecyficationList;
+  }
+
+
 }
 
 
