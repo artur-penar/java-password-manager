@@ -30,7 +30,6 @@ public class CipherMachine {
 
     public String encrypt(String data) throws Exception {
         byte[] dataInBytes = data.getBytes();
-
         byte[] encryptedBytes = encryptionCipher.doFinal(dataInBytes);
         return encode(encryptedBytes);
     }
@@ -75,34 +74,4 @@ public class CipherMachine {
         return encodedKey;
     }
 
-
-    public static void main(String[] args) throws Exception {
-
-        CipherMachine cipherMachine = new CipherMachine();
-        CipherMachine cipherMachine2 = new CipherMachine();
-
-        String encryptedData = cipherMachine.encrypt("Hello");
-        String newEncryptedData = encryptedData;
-        String iv = cipherMachine.getIv();
-        System.out.println("IV: " + iv);
-
-        String secretKey = cipherMachine.getKey();
-        System.out.println(cipherMachine.encryptionCipher);
-
-        System.out.println("SecretKey format: " + secretKey);
-
-        System.out.println("String format: " + secretKey);
-
-//            String decryptedData = cipherMachine.decrypt(newEncryptedData, secretKey, iv);
-
-        String encryptedData2 = "XkOr0IyO+5+8RrQo/D8pj/IsIU1Fm3h/N6E=";
-        String stringSecretKey2 = "t/0V7COqiUuG+THSL1mcCw==";
-        String iv2 = "i22bsUoi2RfBk1hq";
-        
-        String decryptedData2 = cipherMachine2.decrypt(encryptedData2, stringSecretKey2, iv2);
-        System.out.println(decryptedData2);
-        System.out.println("Encrypted Data : " + encryptedData);
-        // System.out.println("Decrypted Data : " + decryptedData);
-
-    }
 }

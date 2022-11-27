@@ -78,40 +78,41 @@ class App {
     public DataRow getDataToDataRow() throws Exception {
         System.out.print("Nazwa aplikacji:\n>");
         String app = scanner.next();
+
         System.out.print("Login:\n>");
         String login = scanner.next();
 
         System.out.print("Hasło:\n>");
         String password = scanner.next();
-        String encrpytedPassword = cipherMachine.encrypt(password);
+        String encryptedPassword = cipherMachine.encrypt(password);
         String key = cipherMachine.getKey();
         String iv = cipherMachine.getIv();
         String spec = key + " " + iv;
 
         System.out.print("Email:\n>");
         String email = getEmail();
+
         System.out.print("Url:\n>");
         String url = scanner.next();
 
         dataRow.setApp(app);
         dataRow.setLogin(login);
-        dataRow.setPassword(encrpytedPassword);
+        dataRow.setPassword(encryptedPassword);
         dataRow.setEmail(email);
         dataRow.setUrl(url);
         dataRow.setSpec(spec);
-        dataRow.displayRow();
 
         return dataRow;
     }
 
-    public void addNewRecord() throws Exception {
+    public void addNewPassword() throws Exception {
         dataManager.insertData(getDataToDataRow());
 
     }
 
-    public ArrayList<DataRow> getPasswordByApp(String appName) throws Exception {
+    public ArrayList<DataRow> getPasswordByAppName(String appName) throws Exception {
         ArrayList<DataRow> encryptedDataRows = dataManager.getListByApp(appName);
-        ArrayList<DataRow> decryptedDataRows = new ArrayList<DataRow>();
+        ArrayList<DataRow> decryptedDataRows = new ArrayList<>();
         for (DataRow rowToDecrypt : encryptedDataRows) {
             String[] decryptSpecList = rowToDecrypt.getDecryptSpecList();
             String secretKey = decryptSpecList[0];
@@ -123,37 +124,36 @@ class App {
         return decryptedDataRows;
     }
 
-    public void retrivePassword() throws Exception{
+    public void retrievePassword() throws Exception {
         boolean isFinish = false;
-        while (!isFinish){
-            System.out.println("Type the application name: (type -da if you want display all aviable apps.)\n>");
+        while (!isFinish) {
+            System.out.print("Type the application name: (-da if you want display all aviable apps / q if you want quit)\n>");
             String appName = scanner.next();
-            if (appName.equals("-da")){
-                dataManager.displayAllApps();
-      } else {
-            ArrayList<DataRow> passwords = getPasswordByApp(appName);
-            for (DataRow row : passwords){
-                row.displayRow();
+            if (appName.equals("-da")) {
+                dataManager.displayAvaiableAppNames();
+            } else if (appName.equals("q")) {
+                isFinish = true;
+            } else {
+                ArrayList<DataRow> passwords = getPasswordByAppName(appName);
+                for (DataRow row : passwords) {
+                    row.displayRow();
+                }
+            }
         }
-      }
+
     }
-          
-  }
 
 
     public void startApp() throws Exception {
         displayMenu();
         int userChoice = getMenuChoice();
         if (userChoice == 1) {
-            addNewRecord();
+            addNewPassword();
         } else if (userChoice == 2) {
-            retrivePassword();
-            }
-
+            retrievePassword();
         }
-        ;
-
     }
+}
 
 
 

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.sun.net.httpserver.Authenticator.Result;
 
 
 public class DataManager {
@@ -17,7 +16,7 @@ public class DataManager {
     static Connection connection = null;
 
     DataManager() {
-    createTable();
+        createTable();
     }
 
     private static void openConnection() {
@@ -56,8 +55,8 @@ public class DataManager {
                 + ");";
 
         openConnection();
-        try (Statement statemenet = connection.createStatement()) {
-            statemenet.execute(createTablelQuerry);
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createTablelQuerry);
             System.out.println("Tabela została utworzona.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -87,7 +86,7 @@ public class DataManager {
     }
 
 
-    public void insertData(DataRow dataRow){
+    public void insertData(DataRow dataRow) {
         String insertDataQuery = "INSERT INTO warehouses(app, login, password, email, url, spec) VALUES(?,?,?,?,?,?)";
         openConnection();
         try (PreparedStatement prepStatement = connection.prepareStatement(insertDataQuery)) {
@@ -99,6 +98,7 @@ public class DataManager {
             prepStatement.setString(6, dataRow.getSpec());
             prepStatement.executeUpdate();
             System.out.println("Wprowadzono dane.");
+            dataRow.displayRow();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -128,22 +128,40 @@ public class DataManager {
         closeConnection();
         return dataRow;
     }
+
     
-    public void displayAllApps(){
-        String allAppDisplayQuerry = "SELECT app from warehouses";
-        openConnection();
-        try(PreparedStatement pstmt = connection.prepareStatement(allAppDisplayQuerry)){
-            ResultSet result = pstmt.executeQuery();
-            while(result.next()){
-                System.out.println(result.getString("app"));
-            
+    public void displayAvaiableAppNames(){
+        ArrayList<String> appNames = getAllAppNames();
+        if (!appNames.isEmpty()){
+            int appCounter = 1;
+            for(String name : appNames){
+                System.out.println(appCounter + ": " + name);
       }
-    } catch (SQLException e){
-          System.out.println(e);
+        } else System.out.println("Is no application."); 
    
-    }  
-    
   }
+
+    private ArrayList<String> getAllAppNames() {
+        String allAppDisplayQuery = "SELECT app from warehouses";
+        ArrayList<String> apps = new ArrayList<String>(); 
+        String appName = null;
+        openConnection();
+        try (PreparedStatement pstmt = connection.prepareStatement(allAppDisplayQuery)) {
+            ResultSet result = pstmt.executeQuery();
+            while (result.next()) {
+                appName = result.getString("app");
+                if (!apps.contains(appName)){
+                    apps.add(appName);
+        }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+
+        closeConnection();
+        return apps;
+    }
 
 
     public ArrayList<DataRow> getListByApp(String appName) {

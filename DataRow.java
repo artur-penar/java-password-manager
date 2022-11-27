@@ -35,52 +35,88 @@ public class DataRow {
     public void displayRow() {
         if (id == 0) {
             System.out.println("Nie ma takiego rekordu.");
-        } else {
+        }else if (id == -1){
+       System.out.println(
+                            " app: " + app +
+                            "\n email: " + email +
+                            "\n login: " + login +
+                            "\n password: " + password +
+                            "\n url: " + url
+      );      
+    } else {
             System.out.println(
-                    "id:" + id +
-                            " app:" + app +
-                            " email:" + email +
-                            " login:" + login +
-                            " password:" + password +
-                            " url:" + url);
+                    "\t id:" + id +
+                            "\n app:" + app +
+                            "\n email:" + email +
+                            "\n login:" + login +
+                            "\n password:" + password +
+                            "\n url:" + url);
         }
     }
 
     // Setters
-    public void setID(int id) { this.id = id; }
-
-    public void setApp(String app) { this.app = app; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public void setLogin(String login) { this.login = login; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public void setUrl(String url) { this.url = url; }
+    public void setID(int id) {
+        this.id = id;
+    }
 
 
-  public void setSpec(String spec) { this.spec = spec; }
+    public void setApp(String app) {
+        this.app = app;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
 
     // Getters
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getApp() { return app; }
+    public String getApp() {
+        return app;
+    }
 
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getLogin() { return login; }
+    public String getLogin() {
+        return login;
+    }
 
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
-    public String getUrl() { return url; }
-    
-    public String getSpec() { return spec; }
+    public String getUrl() {
+        return url;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
 
     public String[] getDecryptSpecList() {
-        String[] decrpytionSpecyficationList = spec.split(" ");
-        return decrpytionSpecyficationList;
-  }
+        return spec.split(" ");
+    }
 
 
 }
