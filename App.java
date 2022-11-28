@@ -24,7 +24,7 @@ class App {
             try {
                 System.out.print(">");
                 userChoice = scanner.nextInt();
-                if (userChoice > 0 && userChoice < 5) {
+                if (userChoice >= 0 && userChoice < 5) {
                     isDataCorrect = true;
                 }
             } catch (Exception e) {
@@ -42,7 +42,8 @@ class App {
                 1. Add new password.
                 2. Retrive password.
                 3. Show all passwords.
-                4. About."""
+                4. About.
+                0. Exit."""
         );
     }
 
@@ -145,22 +146,33 @@ class App {
 
     public void showAllPasswords() {
         dataManager.displayAllItems();
+  }
 
+    public void about(){
+        System.out.println("Developed by Kaban Developers.");
   }
 
 
     public void startApp() throws Exception {
-        displayMenu();
-        int userChoice = getMenuChoice();
-        if (userChoice == 1) {
-            addNewPassword();
-        } else if (userChoice == 2) {
-            retrievePassword();
-        } else if (userChoice == 3) {
-            showAllPasswords();
-    }
-    }
+        boolean isFinish = false;
+        
+        while (!isFinish){
+          displayMenu();
+          int userChoice = getMenuChoice();
+          if (userChoice == 1) {
+              addNewPassword();
+          } else if (userChoice == 2) {
+              retrievePassword();
+          } else if (userChoice == 3) {
+              showAllPasswords();
+          } else if (userChoice == 0){
+              isFinish = true;
+              System.out.println("Bye bye.");
+          } else if (userChoice == 4){
+              about();
+      }
+      }
 }
 
 
-
+}
