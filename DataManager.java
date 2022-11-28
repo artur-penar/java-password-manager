@@ -9,10 +9,6 @@ import java.util.ArrayList;
 
 
 public class DataManager {
-    /**
-     * Data managment class
-     **/
-
     static Connection connection = null;
 
     DataManager() {
@@ -65,7 +61,7 @@ public class DataManager {
     }
 
 
-    public void selectAllItems() {
+    public void displayAllItems() {
         String sqlQuery = "SELECT id, app, url, login, password from warehouses";
         openConnection();
         try (Statement statement = connection.createStatement();
@@ -73,9 +69,9 @@ public class DataManager {
 
             while (result.next()) {
                 System.out.println(result.getInt("id") + "\t" +
-                        result.getString("app") + "\t" +
-                        result.getString("url") + "\t" +
-                        result.getString("login") + "\t" +
+                        result.getString("app") + "\t\t" +
+                        result.getString("url") + "\t\t" +
+                        result.getString("login") + "\t\t" +
                         result.getString("password"));
             }
 
@@ -130,12 +126,13 @@ public class DataManager {
     }
 
     
-    public void displayAvaiableAppNames(){
+    public void displayAvailableAppNames(){
         ArrayList<String> appNames = getAllAppNames();
         if (!appNames.isEmpty()){
             int appCounter = 1;
             for(String name : appNames){
                 System.out.println(appCounter + ": " + name);
+                appCounter++;
       }
         } else System.out.println("Is no application."); 
    
@@ -190,10 +187,6 @@ public class DataManager {
         }
         if (dataRowsList.isEmpty()) {
             System.out.println("Rekord '" + appName + "' nie wystepuje w bazie.");
-        } else {
-            for (DataRow row : dataRowsList) {
-                row.displayRow();
-            }
         }
         closeConnection();
         return dataRowsList;

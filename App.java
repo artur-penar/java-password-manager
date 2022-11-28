@@ -130,7 +130,7 @@ class App {
             System.out.print("Type the application name: (-da if you want display all aviable apps / q if you want quit)\n>");
             String appName = scanner.next();
             if (appName.equals("-da")) {
-                dataManager.displayAvaiableAppNames();
+                dataManager.displayAvailableAppNames();
             } else if (appName.equals("q")) {
                 isFinish = true;
             } else {
@@ -143,6 +143,11 @@ class App {
 
     }
 
+    public void showAllPasswords() {
+        dataManager.displayAllItems();
+
+  }
+
 
     public void startApp() throws Exception {
         displayMenu();
@@ -151,7 +156,9 @@ class App {
             addNewPassword();
         } else if (userChoice == 2) {
             retrievePassword();
-        }
+        } else if (userChoice == 3) {
+            showAllPasswords();
+    }
     }
 }
 
