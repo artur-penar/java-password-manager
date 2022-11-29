@@ -24,7 +24,7 @@ class App {
             try {
                 System.out.print(">");
                 userChoice = scanner.nextInt();
-                if (userChoice >= 0 && userChoice < 5) {
+                if (userChoice >= 0 && userChoice < 6) {
                     isDataCorrect = true;
                 }
             } catch (Exception e) {
@@ -42,7 +42,8 @@ class App {
                 1. Add new password.
                 2. Retrive password.
                 3. Show all passwords.
-                4. About.
+                4. Delete password.
+                5. About.
                 0. Exit."""
         );
     }
@@ -144,35 +145,61 @@ class App {
 
     }
 
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
+
     public void showAllPasswords() {
         dataManager.displayAllItems();
-  }
+    }
 
-    public void about(){
+    public void about() {
         System.out.println("Developed by Kaban Developers.");
+    }
+
+    public void deletePassword() {
+        boolean deleteIsFinish = false;
+        
+        while(!deleteIsFinish){
+            showAllPasswords();
+            System.out.print("Type id you want to remove. \n>");
+            String id = scanner.next();
+            try{ 
+                DataRow rowToRemove = dataManager.getById(Integer.parseInt(id));
+                rowToRemove.displayRow();
+            } catch (Exception e){
+                System.out.println("Id must be integer.");
+                System.out.println(e);
+      }
+        }
   }
 
 
     public void startApp() throws Exception {
         boolean isFinish = false;
-        
-        while (!isFinish){
-          displayMenu();
-          int userChoice = getMenuChoice();
-          if (userChoice == 1) {
-              addNewPassword();
-          } else if (userChoice == 2) {
-              retrievePassword();
-          } else if (userChoice == 3) {
-              showAllPasswords();
-          } else if (userChoice == 0){
-              isFinish = true;
-              System.out.println("Bye bye.");
-          } else if (userChoice == 4){
-              about();
-      }
-      }
-}
+
+        while (!isFinish) {
+            clearScreen();
+            displayMenu();
+            int userChoice = getMenuChoice();
+            if (userChoice == 1) {
+                addNewPassword();
+            } else if (userChoice == 2) {
+                clearScreen();
+                retrievePassword();
+            } else if (userChoice == 3) {
+                showAllPasswords();
+            } else if (userChoice == 4) {
+                deletePassword();
+            } else if (userChoice == 5) {
+                about();
+            } else if (userChoice == 0) {
+                isFinish = true;
+                System.out.println("Bye bye.");
+            }
+        }
+    }
 
 
 }
