@@ -28,7 +28,7 @@ class App {
                     isDataCorrect = true;
                 }
             } catch (Exception e) {
-                System.out.println("Nieprawidłowe dane.");
+                System.out.println("Invalid data.");
                 scanner.next();
             }
         }
@@ -40,7 +40,7 @@ class App {
         System.out.println("""
                 \tMENU
                 1. Add new password.
-                2. Retrive password.
+                2. Retrieve password.
                 3. Show all passwords.
                 4. Delete password.
                 5. About.
@@ -69,7 +69,7 @@ class App {
             if (isValidEmail(emailAddress)) {
                 isValidEmail = true;
             } else {
-                System.out.println("Niepoprawny email.");
+                System.out.println("Invalid email.");
                 System.out.print(">");
             }
 
@@ -78,13 +78,13 @@ class App {
     }
 
     public DataRow getDataToDataRow() throws Exception {
-        System.out.print("Nazwa aplikacji:\n>");
+        System.out.print("Application :\n>");
         String app = scanner.next();
 
         System.out.print("Login:\n>");
         String login = scanner.next();
 
-        System.out.print("Hasło:\n>");
+        System.out.print("Password:\n>");
         String password = scanner.next();
         String encryptedPassword = cipherMachine.encrypt(password);
         String key = cipherMachine.getKey();
@@ -129,7 +129,7 @@ class App {
     public void retrievePassword() throws Exception {
         boolean isFinish = false;
         while (!isFinish) {
-            System.out.print("Type the application name: (-da if you want display all aviable apps / q if you want quit)\n>");
+            System.out.print("Type the application name: (-da if you want display all available apps / q if you want quit)\n>");
             String appName = scanner.next();
             if (appName.equals("-da")) {
                 dataManager.displayAvailableAppNames();
@@ -155,7 +155,7 @@ class App {
     }
 
     public void about() {
-        System.out.println("Developed by Kaban Developers.");
+        System.out.println("Developed by...");
     }
 
     public void deletePassword() {
@@ -163,16 +163,27 @@ class App {
         
         while(!deleteIsFinish){
             showAllPasswords();
-            System.out.print("Type id you want to remove. \n>");
-            String id = scanner.next();
+            System.out.print("Type id you want to remove. (q to quit) \n>");
+            String strId = scanner.next();
+            if (strId.equals("q")){
+                deleteIsFinish = true;
+      } else{
             try{ 
-                DataRow rowToRemove = dataManager.getById(Integer.parseInt(id));
+                int intId = Integer.parseInt(strId);
+                DataRow rowToRemove = dataManager.getById(intId);
                 rowToRemove.displayRow();
+                if (rowToRemove.getId() != 0){
+                    System.out.println("Are you sure ? Type yes/no \n>");
+                    String isSure = scanner.next();
+                    if (isSure.equals("yes")){
+                      dataManager.deleteData(intId);
+            }
+          }
             } catch (Exception e){
                 System.out.println("Id must be integer.");
                 System.out.println(e);
       }
-        }
+        }}
   }
 
 
@@ -180,7 +191,7 @@ class App {
         boolean isFinish = false;
 
         while (!isFinish) {
-            clearScreen();
+
             displayMenu();
             int userChoice = getMenuChoice();
             if (userChoice == 1) {
@@ -196,7 +207,7 @@ class App {
                 about();
             } else if (userChoice == 0) {
                 isFinish = true;
-                System.out.println("Bye bye.");
+                System.out.println("Bye.");
             }
         }
     }
