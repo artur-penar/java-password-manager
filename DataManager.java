@@ -93,22 +93,35 @@ public class DataManager {
             prepStatement.setString(5, dataRow.getUrl());
             prepStatement.setString(6, dataRow.getSpec());
             prepStatement.executeUpdate();
-            System.out.println("Wprowadzono dane.");
+            System.out.println("Data inserted.");
             dataRow.displayRow();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         closeConnection();
     }
+    
+    public void deleteData(int id){
+        String deleteSql = "DELETE FROM warehouses WHERE id = ?";
+        openConnection();
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteSql)){
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            System.out.println("Succesfully removed.");
+    } catch (SQLException e){
+          System.out.println(e.getMessage());
+
+    }
+  }
 
 
-    public DataRow getByApp(String appName) {
+    public DataRow getById(int id) {
         DataRow dataRow = new DataRow();
-        String sqlSelectQuery = "SELECT * FROM warehouses WHERE app = ?";
+        String sqlSelectQuery = "SELECT * FROM warehouses WHERE id = ?";
         openConnection();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuery)) {
-            pstmt.setString(1, appName);
+            pstmt.setInt(1, id);
             ResultSet result = pstmt.executeQuery();
 
             dataRow.setID(result.getInt("id"));
@@ -186,7 +199,7 @@ public class DataManager {
             System.out.println(e.getMessage());
         }
         if (dataRowsList.isEmpty()) {
-            System.out.println("Rekord '" + appName + "' nie wystepuje w bazie.");
+            System.out.println("Record '" + appName + "' does not exists.");
         }
         closeConnection();
         return dataRowsList;
