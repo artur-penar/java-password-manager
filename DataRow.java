@@ -30,27 +30,32 @@ public class DataRow {
         this.url = url;
         this.spec = spec;
     }
-
+    
+    public void displayLikeTab(){
+        String dT = "\t\t";
+        System.out.println("id \t\t app \t\t email \t\t login \t\t password \t\t url");
+        System.out.println(id + dT + app + dT + email + dT + login + dT + password + dT + url );
+  }
 
     public void displayRow() {
         if (id == 0) {
-            System.out.println("Nie ma takiego rekordu.");
+            System.out.println("Record does not exist.");
         }else if (id == -1){
        System.out.println(
                             " app: " + app +
-                            "\n email: " + email +
-                            "\n login: " + login +
-                            "\n password: " + password +
-                            "\n url: " + url
+                            "\t email: " + email +
+                            "\t login: " + login +
+                            "\t password: " + password +
+                            "\t url: " + url
       );      
     } else {
             System.out.println(
-                    "\t id:" + id +
-                            "\n app:" + app +
-                            "\n email:" + email +
-                            "\n login:" + login +
-                            "\n password:" + password +
-                            "\n url:" + url);
+                    "id:" + id +
+                            "\t app:" + app +
+                            "\t email:" + email +
+                            "\t login:" + login +
+                            "\t password:" + password +
+                            "\t url:" + url);
         }
     }
 

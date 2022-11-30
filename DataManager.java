@@ -40,7 +40,7 @@ public class DataManager {
 
 
     public static void createTable() {
-        String createTablelQuerry = "CREATE TABLE IF NOT EXISTS warehouses (\n"
+        String createTablelQuerry = "CREATE TABLE IF NOT EXISTS passwords (\n"
                 + "	id integer PRIMARY KEY AUTOINCREMENT,\n"
                 + "	app text ,\n"
                 + "	login text,\n"
@@ -53,7 +53,7 @@ public class DataManager {
         openConnection();
         try (Statement statement = connection.createStatement()) {
             statement.execute(createTablelQuerry);
-            System.out.println("Tabela została utworzona.");
+            System.out.println("Table created.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -62,7 +62,7 @@ public class DataManager {
 
 
     public void displayAllItems() {
-        String sqlQuery = "SELECT id, app, url, login, password from warehouses";
+        String sqlQuery = "SELECT id, app, url, login, password from passwords";
         openConnection();
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sqlQuery)) {
@@ -83,7 +83,7 @@ public class DataManager {
 
 
     public void insertData(DataRow dataRow) {
-        String insertDataQuery = "INSERT INTO warehouses(app, login, password, email, url, spec) VALUES(?,?,?,?,?,?)";
+        String insertDataQuery = "INSERT INTO passwords(app, login, password, email, url, spec) VALUES(?,?,?,?,?,?)";
         openConnection();
         try (PreparedStatement prepStatement = connection.prepareStatement(insertDataQuery)) {
             prepStatement.setString(1, dataRow.getApp());
@@ -102,7 +102,7 @@ public class DataManager {
     }
     
     public void deleteData(int id){
-        String deleteSql = "DELETE FROM warehouses WHERE id = ?";
+        String deleteSql = "DELETE FROM passwords WHERE id = ?";
         openConnection();
         try (PreparedStatement pstmt = connection.prepareStatement(deleteSql)){
             pstmt.setInt(1, id);
@@ -117,7 +117,7 @@ public class DataManager {
 
     public DataRow getById(int id) {
         DataRow dataRow = new DataRow();
-        String sqlSelectQuery = "SELECT * FROM warehouses WHERE id = ?";
+        String sqlSelectQuery = "SELECT * FROM passwords WHERE id = ?";
         openConnection();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuery)) {
@@ -152,7 +152,7 @@ public class DataManager {
   }
 
     private ArrayList<String> getAllAppNames() {
-        String allAppDisplayQuery = "SELECT app from warehouses";
+        String allAppDisplayQuery = "SELECT app from passwords";
         ArrayList<String> apps = new ArrayList<String>(); 
         String appName = null;
         openConnection();
@@ -176,14 +176,13 @@ public class DataManager {
 
     public ArrayList<DataRow> getListByApp(String appName) {
         ArrayList<DataRow> dataRowsList = new ArrayList<DataRow>();
-        String sqlSelectQuerry = "SELECT * FROM warehouses WHERE app = ?";
+        String sqlSelectQuerry = "SELECT * FROM passwords WHERE app = ?";
         openConnection();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuerry)) {
             pstmt.setString(1, appName);
             ResultSet result = pstmt.executeQuery();
             while (result.next()) {
-                System.out.println(result.getInt("id"));
                 dataRowsList.add(new DataRow(
                         result.getInt("id"),
                         result.getString("app"),
