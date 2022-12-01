@@ -113,7 +113,7 @@ class App {
     }
 
     public ArrayList<DataRow> getPasswordByAppName(String appName) throws Exception {
-        ArrayList<DataRow> encryptedDataRows = dataManager.getListByApp(appName);
+        ArrayList<DataRow> encryptedDataRows = dataManager.getAppList(appName);
         ArrayList<DataRow> decryptedDataRows = new ArrayList<>();
         for (DataRow rowToDecrypt : encryptedDataRows) {
             String[] decryptSpecList = rowToDecrypt.getDecryptSpecList();

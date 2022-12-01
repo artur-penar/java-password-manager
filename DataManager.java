@@ -40,7 +40,7 @@ public class DataManager {
 
 
     public static void createTable() {
-        String createTablelQuerry = "CREATE TABLE IF NOT EXISTS passwords (\n"
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS passwords (\n"
                 + "	id integer PRIMARY KEY AUTOINCREMENT,\n"
                 + "	app text ,\n"
                 + "	login text,\n"
@@ -52,7 +52,7 @@ public class DataManager {
 
         openConnection();
         try (Statement statement = connection.createStatement()) {
-            statement.execute(createTablelQuerry);
+            statement.execute(createTableQuery);
             System.out.println("Table created.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -107,7 +107,7 @@ public class DataManager {
         try (PreparedStatement pstmt = connection.prepareStatement(deleteSql)){
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
-            System.out.println("Succesfully removed.");
+            System.out.println("Successfully removed.");
     } catch (SQLException e){
           System.out.println(e.getMessage());
 
@@ -153,7 +153,7 @@ public class DataManager {
 
     private ArrayList<String> getAllAppNames() {
         String allAppDisplayQuery = "SELECT app from passwords";
-        ArrayList<String> apps = new ArrayList<String>(); 
+        ArrayList<String> apps = new ArrayList<>();
         String appName = null;
         openConnection();
         try (PreparedStatement pstmt = connection.prepareStatement(allAppDisplayQuery)) {
@@ -174,12 +174,12 @@ public class DataManager {
     }
 
 
-    public ArrayList<DataRow> getListByApp(String appName) {
-        ArrayList<DataRow> dataRowsList = new ArrayList<DataRow>();
-        String sqlSelectQuerry = "SELECT * FROM passwords WHERE app = ?";
+    public ArrayList<DataRow> getAppList(String appName) {
+        ArrayList<DataRow> dataRowsList = new ArrayList<>();
+        String sqlSelectQuery = "SELECT * FROM passwords WHERE app = ?";
         openConnection();
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuerry)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(sqlSelectQuery)) {
             pstmt.setString(1, appName);
             ResultSet result = pstmt.executeQuery();
             while (result.next()) {
